@@ -3,8 +3,10 @@ import SearchBar from "./components/SearchBar";
 import MovieCard from "./components/MovieCard";
 import useDebounce from "./hooks/useDebounce";
 import useLocalStorage from "./hooks/useLocalStorage";
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 
-const API_KEY = "fad55766";
+const API_KEY = "e18454d7";
 
 function App() {
   const [query, setQuery] = useState("");
@@ -66,26 +68,15 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen w-full font-sans text-neutral-100 bg-linear-to-br from-red-950 via-neutral-900 to-black">
+    <div className="flex flex-col min-h-screen w-full font-sans text-neutral-100 bg-linear-to-br from-brand-950 via-neutral-900 to-black">
+      <NavBar tab={tab} setTab={setTab} />
+    <main className="flex-1">
     <div className="max-w-[1180px] mx-auto px-6 py-12">
       <SearchBar
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      <div className="flex justify-center gap-3 mb-9">
-        <button
-          className="px-6 py-2.5 rounded-full border border-white/10 bg-white/10 text-neutral-100 text-md font-bold cursor-pointer transition hover:-translate-y-0.5 hover:bg-red-600 hover:border-red-600"
-          onClick={() => setTab("all")}
-        >
-          All
-        </button>
-        <button
-          className="px-6 py-2.5 rounded-full border border-white/10 bg-white/10 text-neutral-100 text-md font-bold cursor-pointer transition hover:-translate-y-0.5 hover:bg-red-600 hover:border-red-600"
-          onClick={() => setTab("favorites")}
-        >
-          Favorites
-        </button>
-      </div>
+
       {tab === "favorites" ? (
         <div className="grid grid-cols-5 gap-6">
           {favorites.map((movie) => (
@@ -101,8 +92,12 @@ function App() {
         <p className="text-center text-white/75 text-lg mt-8">Loading...</p>
       ) : error ? (
         <p className="text-center text-white/75 text-lg mt-8">{error}</p>
+      ) : query.trim() === "" ? (
+        <p className="text-center text-white/75 text-lg mt-8">
+          Start typing above to discover movies and shows.
+        </p>
       ) : (
-        <div className="grid grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {movies.map((movie) => (
             <MovieCard
               key={movie.imdbID}
@@ -116,6 +111,8 @@ function App() {
         </div>
       )}
     </div>
+    </main>
+    <Footer />
     </div>
   );
 }
